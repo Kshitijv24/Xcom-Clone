@@ -21,11 +21,16 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        // Camera Movement
+        HandleCameraMovement();
+        HandleCameraRotation();
+        HandleCameraZoom();
+    }
 
+    private void HandleCameraMovement()
+    {
         Vector3 inputMoveDirection = new Vector3(0, 0, 0);
 
-        if(Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W))
         {
             inputMoveDirection.z = 1f;
         }
@@ -45,10 +50,11 @@ public class CameraController : MonoBehaviour
         float moveSpeed = 10f;
         Vector3 moveVector = transform.forward * inputMoveDirection.z + transform.right * inputMoveDirection.x;
         transform.position += moveVector * moveSpeed * Time.deltaTime;
+    }
 
-        // Camera Rotation
-
-        Vector3 rotationVector = new Vector3 (0, 0, 0);
+    private void HandleCameraRotation()
+    {
+        Vector3 rotationVector = new Vector3(0, 0, 0);
 
         if (Input.GetKey(KeyCode.Q))
         {
@@ -61,16 +67,15 @@ public class CameraController : MonoBehaviour
 
         float rotationSpeed = 100f;
         transform.eulerAngles += rotationVector * rotationSpeed * Time.deltaTime;
+    }
 
-
-        // Camera Zoom
-
-        Debug.Log(Input.mouseScrollDelta);
+    private void HandleCameraZoom()
+    {
         float zoomAmount = 1f;
-        
-        if(Input.mouseScrollDelta.y > 0)
+
+        if (Input.mouseScrollDelta.y > 0)
         {
-            targetFollowOffset.y -= zoomAmount;   
+            targetFollowOffset.y -= zoomAmount;
         }
         if (Input.mouseScrollDelta.y < 0)
         {
@@ -78,9 +83,9 @@ public class CameraController : MonoBehaviour
         }
 
         targetFollowOffset.y = Mathf.Clamp(targetFollowOffset.y, MIN_FOLLOW_Y_OFFSET, MAX_FOLLOW_Y_OFFSET);
-        
+
         float zoomSpeed = 5f;
-        cinemachineTransposer.m_FollowOffset = 
+        cinemachineTransposer.m_FollowOffset =
             Vector3.Lerp(cinemachineTransposer.m_FollowOffset, targetFollowOffset, Time.deltaTime * zoomSpeed);
     }
 }
