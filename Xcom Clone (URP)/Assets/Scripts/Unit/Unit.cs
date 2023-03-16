@@ -31,4 +31,6 @@ public class Unit : MonoBehaviour
     }
 
     public MoveAction GetMoveAction() => moveAction;
+
+    public GridPosition GetGridPosition() => gridPosition;
 }
