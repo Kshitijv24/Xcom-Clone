@@ -14,13 +14,13 @@ public class Unit : MonoBehaviour
 
     private void Start()
     {
-        gridPosition = LevelGrid.Instance.GetGridPositoin(transform.position);
+        gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
         LevelGrid.Instance.AddUnitAtGridPosition(gridPosition, this);
     }
 
     private void Update()
     {
-        GridPosition newGridPosition = LevelGrid.Instance.GetGridPositoin(transform.position);
+        GridPosition newGridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
 
         if(newGridPosition != gridPosition)
         {
