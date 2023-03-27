@@ -37,13 +37,19 @@ public class GridObject
         unitList.Remove(unit);
     }
 
-    public List<Unit> GetUnitList()
-    {
-        return unitList;
-    }
+    public List<Unit> GetUnitList() => unitList;
 
-    public bool HasAnyUnit()
+    public bool HasAnyUnit() => unitList.Count > 0;
+
+    public Unit GetUnit()
     {
-        return unitList.Count > 0;
+        if (HasAnyUnit())
+        {
+            return unitList[0];
+        }
+        else
+        {
+            return null;
+        }
     }
 }
