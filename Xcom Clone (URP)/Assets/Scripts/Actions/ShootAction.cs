@@ -21,6 +21,8 @@ public class ShootAction : BaseAction
         Cooloff,
     }
 
+    [SerializeField] LayerMask obstacleLayerMask;
+
     State state;
     int maxShootDistance = 7;
     float stateTimer;
@@ -138,6 +140,23 @@ public class ShootAction : BaseAction
                     continue;
                 }
 
+                Vector3 unitWorldPosition = LevelGrid.Instance.GetWorldPosition(unitGridPosition);
+                Vector3 shootDirection = (targetUnit.GetWorldPosition() - unitWorldPosition).normalized;
+
+                float unitShoulderHeight = 1.7f;
+
+                bool IsHitByObstacle = Physics.Raycast(
+                    unitWorldPosition + Vector3.up * unitShoulderHeight,
+                    shootDirection,
+                    Vector3.Distance(unitWorldPosition, targetUnit.GetWorldPosition()),
+                    obstacleLayerMask);
+
+                if (IsHitByObstacle)
+                {
+                    // Blocked by an Obstacle
+                    continue;
+                }
+
                 validGridPositionList.Add(testGridPosition);
             }
         }
@@ -158,15 +177,9 @@ public class ShootAction : BaseAction
         ActionStart(onActionComplete);
     }
 
-    public Unit GetTargetUnit()
-    {
-        return targetUnit;
-    }
+    public Unit GetTargetUnit() => targetUnit;
 
-    public int GetMaxShootDistance()
-    {
-        return maxShootDistance;
-    }
+    public int GetMaxShootDistance() => maxShootDistance;
 
     public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
     {
