@@ -63,10 +63,7 @@ public class Unit : MonoBehaviour
 
     public GridPosition GetGridPosition() => gridPosition;
 
-    public Vector3 GetWorldPosition()
-    {
-        return transform.position;
-    }
+    public Vector3 GetWorldPosition() => transform.position;
 
     public BaseAction[] GetBaseActionArray() => baseActionArray;
 
@@ -104,10 +101,7 @@ public class Unit : MonoBehaviour
         OnAnyActionPointsChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    public int GetActionPoints()
-    {
-        return actionPoints;
-    }
+    public int GetActionPoints() => actionPoints;
 
     private void TurnSystem_OnTurnChanged(object sender, EventArgs e)
     {
@@ -119,10 +113,7 @@ public class Unit : MonoBehaviour
         }
     }
 
-    public bool IsEnemy()
-    {
-        return isEnemy;
-    }
+    public bool IsEnemy() => isEnemy;
 
     public void Damage(int damageAmount)
     {
@@ -137,8 +128,5 @@ public class Unit : MonoBehaviour
         OnAnyUnitDead?.Invoke(this, EventArgs.Empty);
     }
 
-    public float GetHealthNormalized()
-    {
-        return healthSystem.GetHealthNormalized();
-    }
+    public float GetHealthNormalized() => healthSystem.GetHealthNormalized();
 }

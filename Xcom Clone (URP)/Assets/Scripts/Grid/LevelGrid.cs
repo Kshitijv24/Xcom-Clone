@@ -94,6 +94,8 @@ public class LevelGrid : MonoBehaviour
 
     public int GetHeight() => GetGridSystem(0).GetHeight();
 
+    public int GetFloorAmount() => floorAmount;
+
     public bool HasAnyUnitOnGridPosition(GridPosition gridPosition)
     {
         GridObject gridObject = GetGridSystem(gridPosition.floor).GetGridObject(gridPosition);
