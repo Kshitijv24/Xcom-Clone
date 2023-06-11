@@ -43,7 +43,7 @@ public class LevelGrid : MonoBehaviour
 
     private void Start()
     {
-        Pathfinding.Instance.Setup(width, height, cellSize);
+        Pathfinding.Instance.Setup(width, height, cellSize, floorAmount);
     }
 
     private GridSystem<GridObject> GetGridSystem(int floor)
