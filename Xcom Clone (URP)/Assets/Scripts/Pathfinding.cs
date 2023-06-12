@@ -12,6 +12,7 @@ public class Pathfinding : MonoBehaviour
 
     [SerializeField] Transform gridDebugObjectPrefab;
     [SerializeField] LayerMask obstaclesLayerMask;
+    [SerializeField] LayerMask floorLayerMask;
 
     int width;
     int height;
@@ -60,6 +61,16 @@ public class Pathfinding : MonoBehaviour
                     Vector3 worldPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
 
                     float raycastOffsetDistance = 1f;
+                    GetNode(x, z, floor).SetIsWalkable(false);
+
+                    if (Physics.Raycast(
+                        worldPosition + Vector3.up * raycastOffsetDistance,
+                        Vector3.down,
+                        raycastOffsetDistance * 2,
+                        floorLayerMask))
+                    {
+                        GetNode(x, z, floor).SetIsWalkable(true);
+                    }
 
                     if (Physics.Raycast(
                         worldPosition + Vector3.down * raycastOffsetDistance,
