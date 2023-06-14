@@ -251,7 +251,24 @@ public class Pathfinding : MonoBehaviour
             neighbourList.Add(GetNode(gridPosition.x + 0, gridPosition.z + 1, gridPosition.floor));
         }
 
-        return neighbourList;
+        List<PathNode> totalNeighbourList = new List<PathNode>();
+        totalNeighbourList.AddRange(neighbourList);
+
+        foreach (PathNode pathNode in neighbourList)
+        {
+            GridPosition neighbourGridPosition = pathNode.GetGridPosition();
+            
+            if(neighbourGridPosition.floor -1 >= 0)
+            {
+                totalNeighbourList.Add(GetNode(neighbourGridPosition.x, neighbourGridPosition.z, neighbourGridPosition.floor - 1));
+            }
+            if (neighbourGridPosition.floor + 1 < floorAmount)
+            {
+                totalNeighbourList.Add(GetNode(neighbourGridPosition.x, neighbourGridPosition.z, neighbourGridPosition.floor + 1));
+            }
+        }
+
+        return totalNeighbourList;
     }
 
     private List<GridPosition> CalculatePath(PathNode endNode)
