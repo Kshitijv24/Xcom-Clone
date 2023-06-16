@@ -13,6 +13,7 @@ public class Pathfinding : MonoBehaviour
     [SerializeField] Transform gridDebugObjectPrefab;
     [SerializeField] LayerMask obstaclesLayerMask;
     [SerializeField] LayerMask floorLayerMask;
+    [SerializeField] Transform pathfindingLinkContainer;
 
     int width;
     int height;
@@ -86,11 +87,14 @@ public class Pathfinding : MonoBehaviour
         }
 
         pathfindingLinkList = new List<PathfindingLink>();
-        pathfindingLinkList.Add(new PathfindingLink
+
+        foreach (Transform pathfindingLinkTransform in pathfindingLinkContainer)
         {
-            gridPositionA = new GridPosition(3, 8, 1),
-            gridPositionB = new GridPosition(3, 7, 0)
-        });
+            if(pathfindingLinkTransform.TryGetComponent(out PathfindingLinkMonobehaviour pathfindingLinkMonobehaviour))
+            {
+                pathfindingLinkList.Add(pathfindingLinkMonobehaviour.GetPathfindingLink());
+            }
+        }
     }
 
     public List<GridPosition> FindPath(GridPosition startGridPosition, GridPosition endGridPosition, out int pathLength)
