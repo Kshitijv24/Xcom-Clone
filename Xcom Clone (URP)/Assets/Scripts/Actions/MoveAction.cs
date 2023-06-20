@@ -8,6 +8,13 @@ public class MoveAction : BaseAction
 {
     public event EventHandler OnStartMoving;
     public event EventHandler OnStopMoving;
+    public event EventHandler<OnChangedFloorsStartedEventArgs> OnChangedFloorsStarted;
+
+    public class OnChangedFloorsStartedEventArgs : EventArgs
+    {
+        public GridPosition unitGridPosition;
+        public GridPosition targetGridPosition;
+    }
 
     [SerializeField] int maxMoveDistance = 4;
 
@@ -75,6 +82,12 @@ public class MoveAction : BaseAction
                     // Different floors
                     isChangingFloors = true;
                     differentFloorsTeleportTimer = differentFloorsTeleportTimerMax;
+
+                    OnChangedFloorsStarted?.Invoke(this, new OnChangedFloorsStartedEventArgs
+                    {
+                        unitGridPosition = unitGridPosition,
+                        targetGridPosition = targetGridPosition,
+                    });
                 }
             }
         }
