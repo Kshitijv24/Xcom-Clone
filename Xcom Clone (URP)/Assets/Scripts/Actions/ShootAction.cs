@@ -41,8 +41,10 @@ public class ShootAction : BaseAction
         {
             case State.Aiming:
                 Vector3 aimDirection = (targetUnit.GetWorldPosition() - unit.GetWorldPosition()).normalized;
+                aimDirection.y = 0f;
+
                 float rotateSpeed = 10f;
-                transform.forward = Vector3.Lerp(transform.forward, aimDirection, rotateSpeed * Time.deltaTime);
+                transform.forward = Vector3.Slerp(transform.forward, aimDirection, rotateSpeed * Time.deltaTime);
                 break;
             
             case State.Shooting:
@@ -119,53 +121,56 @@ public class ShootAction : BaseAction
         {
             for (int z = -maxShootDistance; z <= maxShootDistance; z++)
             {
-                GridPosition offsetGridPosition = new GridPosition(x, z, 0);
-                GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
-
-                if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
+                for (int floor = -maxShootDistance; floor <= maxShootDistance; floor++)
                 {
-                    continue;
+                    GridPosition offsetGridPosition = new GridPosition(x, z, floor);
+                    GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
+
+                    if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
+                    {
+                        continue;
+                    }
+
+                    int testDistance = Mathf.Abs(x) + Mathf.Abs(z);
+
+                    if (testDistance > maxShootDistance)
+                    {
+                        continue;
+                    }
+
+                    if (!LevelGrid.Instance.HasAnyUnitOnGridPosition(testGridPosition))
+                    {
+                        // grid position is empty, no unit
+                        continue;
+                    }
+
+                    Unit targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(testGridPosition);
+
+                    if (targetUnit.IsEnemy() == unit.IsEnemy())
+                    {
+                        // Both units on same 'team'
+                        continue;
+                    }
+
+                    Vector3 unitWorldPosition = LevelGrid.Instance.GetWorldPosition(unitGridPosition);
+                    Vector3 shootDirection = (targetUnit.GetWorldPosition() - unitWorldPosition).normalized;
+
+                    float unitShoulderHeight = 1.7f;
+
+                    bool IsHitByObstacle = Physics.Raycast(
+                        unitWorldPosition + Vector3.up * unitShoulderHeight,
+                        shootDirection,
+                        Vector3.Distance(unitWorldPosition, targetUnit.GetWorldPosition()),
+                        obstacleLayerMask);
+
+                    if (IsHitByObstacle)
+                    {
+                        // Blocked by an Obstacle
+                        continue;
+                    }
+
+                    validGridPositionList.Add(testGridPosition);
                 }
-
-                int testDistance = Mathf.Abs(x) + Mathf.Abs(z);
-                
-                if(testDistance > maxShootDistance)
-                {
-                    continue;
-                }
-
-                if (!LevelGrid.Instance.HasAnyUnitOnGridPosition(testGridPosition))
-                {
-                    // grid position is empty, no unit
-                    continue;
-                }
-
-                Unit targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(testGridPosition);
-
-                if(targetUnit.IsEnemy() == unit.IsEnemy())
-                {
-                    // Both units on same 'team'
-                    continue;
-                }
-
-                Vector3 unitWorldPosition = LevelGrid.Instance.GetWorldPosition(unitGridPosition);
-                Vector3 shootDirection = (targetUnit.GetWorldPosition() - unitWorldPosition).normalized;
-
-                float unitShoulderHeight = 1.7f;
-
-                bool IsHitByObstacle = Physics.Raycast(
-                    unitWorldPosition + Vector3.up * unitShoulderHeight,
-                    shootDirection,
-                    Vector3.Distance(unitWorldPosition, targetUnit.GetWorldPosition()),
-                    obstacleLayerMask);
-
-                if (IsHitByObstacle)
-                {
-                    // Blocked by an Obstacle
-                    continue;
-                }
-
-                validGridPositionList.Add(testGridPosition);
             }
         }
 

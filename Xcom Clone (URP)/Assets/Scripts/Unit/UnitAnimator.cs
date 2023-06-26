@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class UnitAnimator : MonoBehaviour
@@ -84,7 +83,9 @@ public class UnitAnimator : MonoBehaviour
         BulletProjectile bulletProjectile = bulletProjectileTransform.GetComponent<BulletProjectile>();
 
         Vector3 targetUnitShootAtPosition = e.targetUnit.GetWorldPosition();
-        targetUnitShootAtPosition.y = shootPointTransform.position.y;
+
+        float unitShoulderHeight = 1.7f;
+        targetUnitShootAtPosition.y += unitShoulderHeight;
 
         bulletProjectile.Setup(targetUnitShootAtPosition);
     }
