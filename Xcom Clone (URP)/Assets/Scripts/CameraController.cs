@@ -5,13 +5,26 @@ using Cinemachine;
 
 public class CameraController : MonoBehaviour
 {
+    public static CameraController Instance { get; private set; }
+
     const float MIN_FOLLOW_Y_OFFSET = 2f;
-    const float MAX_FOLLOW_Y_OFFSET = 12f;
+    const float MAX_FOLLOW_Y_OFFSET = 15f;
 
     [SerializeField] CinemachineVirtualCamera cinemachineVirtualCamera;
 
     Vector3 targetFollowOffset;
     CinemachineTransposer cinemachineTransposer;
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Debug.LogError("There's more than one CameraController! " + transform + " - " + Instance);
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
 
     private void Start()
     {
@@ -55,4 +68,6 @@ public class CameraController : MonoBehaviour
         cinemachineTransposer.m_FollowOffset =
             Vector3.Lerp(cinemachineTransposer.m_FollowOffset, targetFollowOffset, Time.deltaTime * zoomSpeed);
     }
+
+    public float GetCameraHeight() => targetFollowOffset.y;
 }
