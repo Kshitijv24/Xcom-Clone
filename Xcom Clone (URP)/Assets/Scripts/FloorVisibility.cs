@@ -18,7 +18,7 @@ public class FloorVisibility : MonoBehaviour
     {
         floor = LevelGrid.Instance.GetFloor(transform.position);
 
-        if(floor == 0 && !dynamicFloorPosition)
+        if (floor == 0 && !dynamicFloorPosition)
         {
             Destroy(this);
         }
@@ -32,11 +32,11 @@ public class FloorVisibility : MonoBehaviour
         }
 
         float cameraHeight = CameraController.Instance.GetCameraHeight();
-        
+
         float floorHeightOffset = 2f;
         bool showObject = cameraHeight > LevelGrid.FLOOR_HEIGHT * floor + floorHeightOffset;
 
-        if (showObject)
+        if (showObject || floor == 0)
         {
             Show();
         }
