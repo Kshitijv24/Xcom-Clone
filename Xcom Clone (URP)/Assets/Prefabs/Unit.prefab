@@ -820,6 +820,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dynamicFloorPosition: 1
+  ignoreRendererList:
+  - {fileID: 6271189171232032168}
 --- !u!1 &7917483200362806202
 GameObject:
   m_ObjectHideFlags: 0

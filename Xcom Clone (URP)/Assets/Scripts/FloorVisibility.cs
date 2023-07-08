@@ -5,6 +5,7 @@ using UnityEngine;
 public class FloorVisibility : MonoBehaviour
 {
     [SerializeField] bool dynamicFloorPosition;
+    [SerializeField] List<Renderer> ignoreRendererList;
 
     Renderer[] rendererArray;
     int floor;
@@ -50,6 +51,11 @@ public class FloorVisibility : MonoBehaviour
     {
         foreach (Renderer renderer in rendererArray)
         {
+            if (ignoreRendererList.Contains(renderer))
+            {
+                continue;
+            }
+
             renderer.enabled = true;
         }
     }
@@ -58,6 +64,11 @@ public class FloorVisibility : MonoBehaviour
     {
         foreach (Renderer renderer in rendererArray)
         {
+            if (ignoreRendererList.Contains(renderer))
+            {
+                continue;
+            }
+
             renderer.enabled = false;
         }
     }
